@@ -10,5 +10,5 @@
 
 ## Step to install
 
-* Execute SQL script files which in folder `/script`
-* Setting configuration file `/src/spider.cfg`:
+* Execute SQL script files which in folder `/script`.
+* Setting configuration file `/src/spider.cfg`.
