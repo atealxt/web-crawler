@@ -5,7 +5,7 @@ class Tracker(object):
         Constructor
         '''
 
-    def track(self, seed):
+    def track(self, seeds, source):
         print "TODO"
 
     def isNewSeed(self, seed):
