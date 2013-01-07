@@ -6,4 +6,4 @@ class Fetcher(object):
         '''
 
     def fetch(self, url, config):
-        print "TODO"
+        print "Implement by subclass..."

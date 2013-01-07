@@ -6,4 +6,9 @@ class Spider(object):
         '''
 
     def crawl(self):
-        print "TODO"
+        print "Implement by subclass..."
+
+'''
+TODO plus:
+Distribution design
+'''

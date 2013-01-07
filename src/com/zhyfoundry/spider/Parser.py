@@ -6,7 +6,7 @@ class Parser(object):
         '''
 
     def parse(self, source):
-        print "TODO"
+        print "Implement by subclass..."
 
 class ParseResult(object):
 
