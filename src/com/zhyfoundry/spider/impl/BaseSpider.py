@@ -1,7 +1,5 @@
-from com.zhyfoundry.spider import Spider
-import ConfigParser
+from com.zhyfoundry.spider import Spider, DBUtils
 import mysql.connector
-import os
 
 class BaseSpider(Spider.Spider):
 
@@ -22,14 +20,7 @@ class BaseSpider(Spider.Spider):
         cursor = None
         cnx = None
         try:
-            configParser = ConfigParser.ConfigParser()
-            config_fn = os.path.join(os.path.dirname(__file__), '..', '..', '..' , '..', 'spider.cfg')
-            configParser.read(config_fn)
-            dbname = configParser.get('Database', 'dbname');
-            host = configParser.get('Database', 'host');
-            username = configParser.get('Database', 'username');
-            password = configParser.get('Database', 'password');
-            cnx = mysql.connector.connect(user=username, password=password, host=host, database=dbname)
+            cnx = DBUtils.DBUtils().getConnection();
             cursor = cnx.cursor()
             cursor.execute('SELECT ID FROM SPIDER WHERE CODE = %s', (_code,))
             row = cursor.fetchone()
