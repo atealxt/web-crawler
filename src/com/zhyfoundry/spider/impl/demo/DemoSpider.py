@@ -1,7 +1,8 @@
-from com.zhyfoundry.spider import Spider, Configuration
+from com.zhyfoundry.spider import Configuration
+from com.zhyfoundry.spider.impl import BaseSpider
 from com.zhyfoundry.spider.impl.demo import DemoFetcher, DemoParser, DemoTracker
 
-class DemoSpider(Spider.Spider):
+class DemoSpider(BaseSpider.BaseSpider):
 
     def __init__(self):
         super(DemoSpider, self).__init__()
