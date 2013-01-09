@@ -13,7 +13,7 @@ class Configuration(object):
     _instanceFromCfgFile = None
 
     @classmethod
-    def readFromCfgFile(self):
+    def readFromFile(self):
         if not self._instanceFromCfgFile:
             configParser = ConfigParser.ConfigParser()
             config_fn = os.path.join(os.path.dirname(__file__), '..', '..' , '..', 'spider.cfg')

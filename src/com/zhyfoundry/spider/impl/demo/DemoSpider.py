@@ -10,7 +10,7 @@ class DemoSpider(BaseSpider.BaseSpider):
     def crawl(self):
 
         fetcher = DemoFetcher.DemoFetcher();
-        html = fetcher.fetch("http://python.org/", Configuration.Configuration.readFromCfgFile());
+        html = fetcher.fetch("http://python.org/", Configuration.Configuration.readFromFile());
         html = html.decode('gbk').encode('utf-8')
 
         parser = DemoParser.DemoParser()
