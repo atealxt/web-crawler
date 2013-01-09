@@ -4,9 +4,8 @@ from com.zhyfoundry.spider.impl.demo import DemoFetcher, DemoParser, DemoTracker
 class DemoSpider(Spider.Spider):
 
     def __init__(self):
-        '''
-        Constructor
-        '''
+        super(DemoSpider, self).__init__()
+
     def crawl(self):
 
         fetcher = DemoFetcher.DemoFetcher();

@@ -5,8 +5,8 @@
 * Python 2.x.
 * Mechanize 0.2.5 or higher.
 * BeautifulSoup 4 or higher.
-* Python MySQL Connector.
 * MySQL 5 or higher.
+* Python MySQL Connector.
 
 ## Step to install
 
