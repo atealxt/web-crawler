@@ -25,3 +25,10 @@ class Configuration(object):
             interval = configParser.getint('Spider', 'interval');
             self._instanceFromCfgFile = self(connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval)
         return self._instanceFromCfgFile;
+
+    def __repr__(self):
+        return self.__module__ + '.' + self.__class__.__name__ + '\n connectTimeout = ' + str(self.connectTimeout)\
+             + ', maxFetchCount = ' + str(self.maxFetchCount)\
+             + ', maxExecuteTime = ' + str(self.maxExecuteTime)\
+             + ', numOfParallel = ' + str(self.numOfParallel)\
+             + ', interval = ' + str(self.interval)\
