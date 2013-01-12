@@ -1,5 +1,6 @@
 from com.zhyfoundry.spider import Spider, DBUtils
 import mysql.connector
+import time
 
 class BaseSpider(Spider.Spider):
 
@@ -37,14 +38,15 @@ class BaseSpider(Spider.Spider):
                 cnx.close()
 
     @classmethod
-    def fetchURL(self, limit = 1):
+    def fetchURL(self, trackingTimestamp = time.strftime('%Y-%m-%d %H:%M:%S'), countLimit = 1):
         self._initId()
         cursor = None
         cnx = None
         try:
             cnx = DBUtils.DBUtils().getConnection();
             cursor = cnx.cursor()
-            cursor.execute('SELECT ID, URL FROM URL_TRACKER WHERE SPIDER_ID = %s ORDER BY LATEST_TRACK_TIME DESC LIMIT %s', (self.id, limit))
+            cursor.execute('SELECT ID, URL FROM URL_TRACKER WHERE SPIDER_ID = %s AND LATEST_TRACK_TIME < %s ORDER BY LATEST_TRACK_TIME DESC LIMIT %s',\
+                           (self.id, trackingTimestamp, countLimit))
             row = cursor.fetchone()
             if row is not None:
                 return URLTracker(row[0], row[1])
