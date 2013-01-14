@@ -10,7 +10,7 @@ class CRM(object):
     def saveEnterprise(self, name = None, contact = '', email = '', tel = '', mobileNo = '', faxNo = '', source = None, remark = '', keyword = '', countryName = None):
 
         if name is None:
-            raise Exception('Enterprise name cannot be null!')
+            raise Exception("Enterprise's name can't be null!")
         country_id = self.getCountryId(countryName);
         cursor = None
         cnx = None
