@@ -1,6 +1,6 @@
 from com.zhyfoundry.spider.impl import BaseFetcher
 
-class DemoFetcher(BaseFetcher.BaseFetcher):
+class Fetcher1(BaseFetcher.BaseFetcher):
 
     def __init__(self):
         pass

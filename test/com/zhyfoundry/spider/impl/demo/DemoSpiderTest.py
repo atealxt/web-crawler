@@ -1,7 +1,7 @@
 from com.zhyfoundry.spider.impl.demo import DemoSpider
 import unittest
 
-class Test(unittest.TestCase):
+class DemoSpiderTest(unittest.TestCase):
 
     def testCrawl(self):
         c = DemoSpider.DemoSpider()

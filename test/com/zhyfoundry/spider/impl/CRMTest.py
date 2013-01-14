@@ -1,7 +1,7 @@
 import unittest
 from com.zhyfoundry.spider.impl.CRM import CRM
 
-class Test(unittest.TestCase):
+class CRMTest(unittest.TestCase):
 
     def testGetCountryId(self):
         country_id = CRM.getCountryId('China');

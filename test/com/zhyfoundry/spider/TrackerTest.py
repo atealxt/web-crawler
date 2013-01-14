@@ -2,7 +2,8 @@
 
 from com.zhyfoundry.spider import Tracker
 import unittest
-class Test(unittest.TestCase):
+
+class TrackerTest(unittest.TestCase):
 
     def testCanonizeURL(self):
         c = Tracker.Tracker()

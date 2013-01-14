@@ -23,9 +23,10 @@ class BaseSpider(Spider.Spider):
         try:
             cnx = DBUtils.DBUtils().getConnection();
             cursor = cnx.cursor()
-            cursor.execute('SELECT ID FROM SPIDER WHERE CODE = %s', (_code,))
+            cursor.execute('SELECT ID, NAME FROM SPIDER WHERE CODE = %s', (_code,))
             row = cursor.fetchone()
             if row is not None:
+                print 'Spider ' + _code + ' name: `' + row[1] + '`'
                 return row[0]
             raise Exception("Spider not found! Code: " + _code)
         except mysql.connector.Error:
@@ -60,9 +61,9 @@ class BaseSpider(Spider.Spider):
 
 class URLTracker(object):
 
-    def __init__(self, ID, URL):
-        self.ID = ID
-        self.URL = URL
+    def __init__(self, _id, _url):
+        self.id = _id
+        self.url = _url
 
     def __repr__(self):
-        return self.__module__ + '.' + self.__class__.__name__ + '\n ID = ' + str(self.ID) + ', URL = ' + self.URL
+        return self.__module__ + '.' + self.__class__.__name__ + '\n id = ' + str(self.id) + ', url = ' + self.url
