@@ -3,6 +3,10 @@ import os
 
 class Configuration(object):
 
+    _configParser = ConfigParser.ConfigParser()
+    _configParser.read(os.path.join(os.path.dirname(__file__), '..', '..' , '..', 'spider.cfg'))
+    _instanceFromCfgFile = None
+
     def __init__(self, connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval):
         self.connectTimeout = connectTimeout
         self.maxFetchCount = maxFetchCount
@@ -10,19 +14,14 @@ class Configuration(object):
         self.numOfParallel = numOfParallel
         self.interval = interval
 
-    _instanceFromCfgFile = None
-
     @classmethod
     def readFromFile(self):
         if not self._instanceFromCfgFile:
-            configParser = ConfigParser.ConfigParser()
-            config_fn = os.path.join(os.path.dirname(__file__), '..', '..' , '..', 'spider.cfg')
-            configParser.read(config_fn)
-            connectTimeout = configParser.getint('Spider', 'connectTimeout');
-            maxFetchCount = configParser.getint('Spider', 'maxFetchCount');
-            maxExecuteTime = configParser.getint('Spider', 'maxExecuteTime');
-            numOfParallel = configParser.getint('Spider', 'numOfParallel');
-            interval = configParser.getint('Spider', 'interval');
+            connectTimeout = self.getint('Spider', 'connectTimeout');
+            maxFetchCount = self.getint('Spider', 'maxFetchCount');
+            maxExecuteTime = self.getint('Spider', 'maxExecuteTime');
+            numOfParallel = self.getint('Spider', 'numOfParallel');
+            interval = self.getint('Spider', 'interval');
             self._instanceFromCfgFile = self(connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval)
         return self._instanceFromCfgFile;
 
@@ -32,3 +31,11 @@ class Configuration(object):
              + ', maxExecuteTime = ' + str(self.maxExecuteTime)\
              + ', numOfParallel = ' + str(self.numOfParallel)\
              + ', interval = ' + str(self.interval)\
+
+    @classmethod
+    def get(self, section, key):
+        return self._configParser.get(section, key);
+
+    @classmethod
+    def getint(self, section, key):
+        return self._configParser.getint(section, key);

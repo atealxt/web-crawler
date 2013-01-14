@@ -1,3 +1,4 @@
+from com.zhyfoundry.spider import Configuration
 import ConfigParser
 import mysql.connector
 import os
@@ -16,13 +17,10 @@ class DBUtils(object):
     def getConnection(self):
         try:
             if not self.dbname:
-                configParser = ConfigParser.ConfigParser()
-                config_fn = os.path.join(os.path.dirname(__file__), '..', '..' , '..', 'spider.cfg')
-                configParser.read(config_fn)
-                self.dbname = configParser.get('Database', 'dbname');
-                self.host = configParser.get('Database', 'host');
-                self.username = configParser.get('Database', 'username');
-                self.password = configParser.get('Database', 'password');
+                self.dbname = Configuration.Configuration.get('Database', 'dbname');
+                self.host = Configuration.Configuration.get('Database', 'host');
+                self.username = Configuration.Configuration.get('Database', 'username');
+                self.password = Configuration.Configuration.get('Database', 'password');
             return mysql.connector.connect(user=self.username, password=self.password, host=self.host, database=self.dbname)
         except mysql.connector.Error:
             raise
