@@ -30,7 +30,6 @@ class BaseSpider(Spider.Spider):
             raise Exception("Spider not found! Code: " + _code)
         except mysql.connector.Error:
             raise
-
         finally:
             if cursor:
                 cursor.close()
@@ -53,7 +52,6 @@ class BaseSpider(Spider.Spider):
             return None;
         except mysql.connector.Error:
             raise
-
         finally:
             if cursor:
                 cursor.close()
