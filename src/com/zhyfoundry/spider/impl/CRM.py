@@ -7,18 +7,18 @@ class CRM(object):
         pass
 
     @classmethod
-    def saveEnterprise(self, name = None, contact = '', email = '', tel = '', mobileNo = '', faxNo = '', source = None, remark = '', keyword = '', countryName = None):
+    def saveEnterprise(self, enterprise):
 
-        if name is None:
+        if enterprise.name is None:
             raise Exception("Enterprise's name can't be null!")
-        country_id = self.getCountryId(countryName);
+        country_id = self.getCountryId(enterprise.countryName);
         cursor = None
         cnx = None
         try:
             cnx = DBUtils.DBUtils().getConnectionCRM();
             cursor = cnx.cursor()
             cursor.execute('INSERT INTO ENTERPRISE (`NAME`, `CONTACT`, `EMAIL`, `TEL`, `MOBILE_NO`, `FAX_NO`, `SOURCE`, `REMARK`, `KEYWORD`, `COUNTRY_ID`, `STATUS`, `COUNT_MAIL_SENT`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',\
-                           (name, contact, email, tel, mobileNo, faxNo, source, remark, keyword, country_id, 0, 0))
+                           (enterprise.name, enterprise.contact, enterprise.email, enterprise.tel, enterprise.mobileNo, enterprise.faxNo, enterprise.source, enterprise.remark, enterprise.keyword, country_id, 0, 0))
             cnx.commit()
         except mysql.connector.Error:
             try:
@@ -52,3 +52,20 @@ class CRM(object):
                 cursor.close()
             if cnx:
                 cnx.close()
+
+class Enterprise(object):
+
+    def __init__(self, name = None, contact = '', email = '', tel = '', mobileNo = '', faxNo = '', source = None, remark = '', keyword = '', countryName = None):
+        self.name = name
+        self.contact = contact
+        self.email = email
+        self.tel = tel
+        self.mobileNo = mobileNo
+        self.faxNo = faxNo
+        self.source = source
+        self.remark = remark
+        self.keyword = keyword
+        self.countryName = countryName
+
+    def __repr__(self):
+        return self.__module__ + '.' + self.__class__.__name__ + '\n name = ' + str(self.name) + ', countryName = ' + self.countryName

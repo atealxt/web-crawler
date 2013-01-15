@@ -1,11 +1,10 @@
 from bs4 import BeautifulSoup
 from com.zhyfoundry.spider import Parser
+
 class DemoParser(Parser.Parser):
 
     def __init__(self):
-        '''
-        Constructor
-        '''
+        pass
 
     def parse(self, source):
         soup = BeautifulSoup(source)

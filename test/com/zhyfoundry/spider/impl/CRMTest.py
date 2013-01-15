@@ -1,5 +1,5 @@
+from com.zhyfoundry.spider.impl.CRM import CRM, Enterprise
 import unittest
-from com.zhyfoundry.spider.impl.CRM import CRM
 
 class CRMTest(unittest.TestCase):
 
@@ -10,7 +10,8 @@ class CRMTest(unittest.TestCase):
         pass
 
     def testSaveEnterprise(self):
-        CRM.saveEnterprise('testSaveEnterprise', 'admin', 'admin@admin.com', '123456', '234567', '345678', 'zhyfoundry-spider', 'remark', 'keyword', 'China');
+        enterprise = Enterprise('testSaveEnterprise', 'admin', 'admin@admin.com', '123456', '234567', '345678', 'zhyfoundry-spider', 'remark', 'keyword', 'China')
+        CRM.saveEnterprise(enterprise);
         pass
 
 if __name__ == "__main__":
