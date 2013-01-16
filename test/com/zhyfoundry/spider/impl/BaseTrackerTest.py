@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from com.zhyfoundry.spider import Tracker
+from com.zhyfoundry.spider.impl import BaseTracker
 import unittest
 
-class TrackerTest(unittest.TestCase):
+class BaseTrackerTest(unittest.TestCase):
 
     def testCanonizeURL(self):
-        c = Tracker.Tracker()
+        c = BaseTracker.BaseTracker()
 
         self.assertEqual('http://baidu.com:80', c.canonizeURL('baidu.com'))
         self.assertEqual('http://www.baidu.com:80/', c.canonizeURL('www.baidu.com/'))

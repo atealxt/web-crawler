@@ -1,6 +1,6 @@
 from com.zhyfoundry.spider import Configuration
 from com.zhyfoundry.spider.impl import BaseSpider
-from com.zhyfoundry.spider.impl.s1 import Fetcher1, Parser1
+from com.zhyfoundry.spider.impl.s1 import Fetcher1, Parser1, Tracker1
 
 class Spider1(BaseSpider.BaseSpider):
 
@@ -16,6 +16,9 @@ class Spider1(BaseSpider.BaseSpider):
 
         parser = Parser1.Parser1()
         parseResult = parser.parse(html)
-        print parseResult.newSeeds
 
-        #TODO
+        #TODO save Enterprise
+
+        tracker = Tracker1.Tracker1()
+        basePath = urlTracker.url[:urlTracker.url.find("/", 7)];
+        tracker.track(parseResult.newSeeds, urlTracker.id, basePath)
