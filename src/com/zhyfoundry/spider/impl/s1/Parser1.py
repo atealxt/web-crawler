@@ -17,7 +17,7 @@ class Parser1(Parser.Parser):
         if len(archs) > 0:
             return ParseResult(None, archs)
 
-        tr = soup.select("table.bodycopy > tbody > tr")
+        tr = soup.select("table.bodycopy > tbody > tr > td table")[0].select("tr")
         if len(tr) == 9:
             _name = tr[0].find_all("td")[1].string
             _contact = ''

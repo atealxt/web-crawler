@@ -11,6 +11,7 @@ class Tracker1(BaseTracker.BaseTracker):
                 canonizeURL = self.canonizeURL(basePath + e['href'])
                 _id = self.getURLId(canonizeURL)
                 if self.isNewSeed(canonizeURL, _id):
+                    print 'Find new url: ' + canonizeURL
                     self.saveURL(spiderId, canonizeURL, source)
                 else:
                     self.updateTrackTime(_id)
