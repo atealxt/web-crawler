@@ -1,4 +1,5 @@
-from com.zhyfoundry.spider import Tracker
+from com.zhyfoundry.spider import Tracker, DBUtils
+import mysql.connector
 
 class BaseTracker(Tracker.Tracker):
 
@@ -54,6 +55,67 @@ class BaseTracker(Tracker.Tracker):
             return url;
         return url[:_idxPoundSign]
 
+    def saveURL(self, spiderId, url, urlSource):
+
+        cursor = None
+        cnx = None
+        try:
+            cnx = DBUtils.DBUtils().getConnection();
+            cursor = cnx.cursor()
+            cursor.execute('INSERT INTO URL_TRACKER (`SPIDER_ID`, `URL`, `URL_SOURCE`) VALUES (%s, %s, %s)',\
+                           (spiderId, url, urlSource))
+            cnx.commit()
+        except mysql.connector.Error:
+            try:
+                cnx.rollback()
+            except:
+                raise
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+            if cnx:
+                cnx.close()
+
+    def getURLId(self, url):
+        cursor = None
+        cnx = None
+        try:
+            cnx = DBUtils.DBUtils().getConnection();
+            cursor = cnx.cursor()
+            cursor.execute('SELECT ID FROM URL_TRACKER WHERE URL = %s', (url,))
+            row = cursor.fetchone()
+            if row is not None:
+                return row[0]
+            return None;
+        except mysql.connector.Error:
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+            if cnx:
+                cnx.close()
+
+    def updateTrackTime(self, urlId):
+
+        cursor = None
+        cnx = None
+        try:
+            cnx = DBUtils.DBUtils().getConnection();
+            cursor = cnx.cursor()
+            cursor.execute('UPDATE URL_TRACKER SET LATEST_TRACK_TIME = NOW() WHERE ID = %s', (urlId,))
+            cnx.commit()
+        except mysql.connector.Error:
+            try:
+                cnx.rollback()
+            except:
+                raise
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+            if cnx:
+                cnx.close()
 
 '''
 TODO plus:

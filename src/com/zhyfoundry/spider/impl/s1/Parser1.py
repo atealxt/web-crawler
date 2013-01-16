@@ -17,7 +17,7 @@ class Parser1(Parser.Parser):
         if len(archs) > 0:
             return ParseResult(None, archs)
 
-        tr = soup.select(".bodycopy > tbody > tr")
+        tr = soup.select("table.bodycopy > tbody > tr")
         if len(tr) == 9:
             _name = tr[0].find_all("td")[1].string
             _contact = ''
@@ -31,5 +31,5 @@ class Parser1(Parser.Parser):
             _countryName = 'UK'
             enterprise = Enterprise(_name, _contact, _email, _tel, _mobileNo, _faxNo, _source, _remark, _keyword, _countryName)
             return ParseResult(enterprise, [])
-
+        return ParseResult(None, None)
 

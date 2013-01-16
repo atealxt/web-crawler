@@ -67,3 +67,8 @@ class URLTracker(object):
 
     def __repr__(self):
         return self.__module__ + '.' + self.__class__.__name__ + '\n id = ' + str(self.id) + ', url = ' + self.url
+
+'''
+TODO plus:
+Content signature
+'''
