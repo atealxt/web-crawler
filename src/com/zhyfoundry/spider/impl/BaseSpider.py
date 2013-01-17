@@ -47,10 +47,11 @@ class BaseSpider(Spider.Spider):
             cursor = cnx.cursor()
             cursor.execute('SELECT ID, URL FROM URL_TRACKER WHERE SPIDER_ID = %s AND LATEST_TRACK_TIME < %s ORDER BY LATEST_TRACK_TIME DESC LIMIT %s',\
                            (self.id, trackingTimestamp, countLimit))
-            row = cursor.fetchone()
-            if row is not None:
-                return URLTracker(row[0], row[1])
-            return None;
+            rows = cursor.fetchall()
+            urlTrackers = []
+            for row in rows:
+                urlTrackers.append(URLTracker(row[0], row[1]))
+            return urlTrackers;
         except mysql.connector.Error:
             raise
         finally:

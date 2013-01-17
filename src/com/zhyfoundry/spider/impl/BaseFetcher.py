@@ -36,3 +36,8 @@ class BaseFetcher(Fetcher.Fetcher):
 
         html = r.read()
         return html
+
+'''
+TODO plus:
+connectTimeout
+'''
