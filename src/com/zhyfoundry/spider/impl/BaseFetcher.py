@@ -1,6 +1,7 @@
 from com.zhyfoundry.spider import Fetcher
 import cookielib
 import mechanize
+import socket
 
 class BaseFetcher(Fetcher.Fetcher):
 
@@ -31,13 +32,12 @@ class BaseFetcher(Fetcher.Fetcher):
 
         br.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0')]
 
-        r = br.open(url)
-        assert br.viewing_html()
-
+        try:
+            r = br.open(url, timeout = config.connectTimeout)
+        except mechanize.URLError, exc:
+            if isinstance(exc.reason, socket.timeout):
+                print "Timeout occurred"
+                return None
+            raise
         html = r.read()
         return html
-
-'''
-TODO plus:
-connectTimeout
-'''
