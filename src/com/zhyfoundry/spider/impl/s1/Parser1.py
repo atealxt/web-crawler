@@ -3,6 +3,7 @@ from com.zhyfoundry.spider import Parser
 from com.zhyfoundry.spider.Parser import ParseResult
 from com.zhyfoundry.spider.impl.CRM import Enterprise
 import re
+import traceback
 
 class Parser1(Parser.Parser):
 
@@ -10,7 +11,14 @@ class Parser1(Parser.Parser):
         pass
 
     def parse(self, source, url):
-        soup = BeautifulSoup(source)
+        try:
+            soup = BeautifulSoup(source)
+        except:
+            print 'Parse html error:'
+            print source
+            print ''
+            print traceback.format_exc()
+            return ParseResult(None, None)
 
         archs = soup.findAll(href = re.compile("action=profile&cid="))
 

@@ -13,7 +13,7 @@ class Spider1(BaseSpider.BaseSpider):
     def crawl(self, trackingTimestamp):
 
         config = Configuration.Configuration.readFromFile();
-        countLimit = 1 if config.maxFetchCount == -1 else config.maxFetchCount
+        countLimit = 65535 if config.maxFetchCount == -1 else config.maxFetchCount
         urlTrackers = self.fetchURL(trackingTimestamp, countLimit)
         if len(urlTrackers) == 0:
             print 'No URL to fetch.'
