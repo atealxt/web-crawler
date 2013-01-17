@@ -1,6 +1,8 @@
 from com.zhyfoundry.spider import Configuration
 from com.zhyfoundry.spider.impl import BaseSpider
+from com.zhyfoundry.spider.impl.CRM import CRM
 from com.zhyfoundry.spider.impl.s1 import Fetcher1, Parser1, Tracker1
+import traceback
 
 class Spider1(BaseSpider.BaseSpider):
 
@@ -18,9 +20,13 @@ class Spider1(BaseSpider.BaseSpider):
         html = fetcher.fetch(urlTracker.url, Configuration.Configuration.readFromFile())
 
         parser = Parser1.Parser1()
-        parseResult = parser.parse(html)
+        parseResult = parser.parse(html, urlTracker.url)
 
-        #TODO save Enterprise
+        if parseResult.content != None:
+            try:
+                CRM.saveEnterprise(parseResult.content);
+            except:
+                print traceback.format_exc()
 
         tracker = Tracker1.Tracker1()
         basePath = urlTracker.url[:urlTracker.url.find("/", 7)]

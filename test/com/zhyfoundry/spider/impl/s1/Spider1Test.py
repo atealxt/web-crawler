@@ -5,7 +5,7 @@ class Spider1Test(unittest.TestCase):
 
     def testCrawl(self):
         c = Spider1.Spider1()
-        c.crawl('2013-01-16 17:46:41')
+        c.crawl('2013-01-17 15:47:01')
         pass
 
 if __name__ == "__main__":

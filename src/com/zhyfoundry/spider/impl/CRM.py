@@ -12,6 +12,7 @@ class CRM(object):
         if enterprise.name is None:
             raise Exception("Enterprise's name can't be null!")
         country_id = self.getCountryId(enterprise.countryName);
+        print "Save: " + str(enterprise)
         cursor = None
         cnx = None
         try:
