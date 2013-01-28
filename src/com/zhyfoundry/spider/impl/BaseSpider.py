@@ -5,30 +5,30 @@ import time
 class BaseSpider(Spider.Spider):
 
     id = None
+    username = None
+    password = None
 
     def __init__(self):
-        self._initId()
-
-    @classmethod
-    def _initId(self):
         if not self.id:
-            #_code = self.__module__ + '.' + self.__class__.__name__
-            self.id = self._getId(self.__module__)
+            self.initSpider(self.__module__)
 
     @classmethod
-    def _getId(self, _code):
+    def initSpider(self, _code):
 
         cursor = None
         cnx = None
         try:
             cnx = DBUtils.DBUtils().getConnection();
             cursor = cnx.cursor()
-            cursor.execute('SELECT ID, NAME FROM SPIDER WHERE CODE = %s', (_code,))
+            cursor.execute('SELECT ID, NAME, USERNAME, PASSWORD FROM SPIDER WHERE CODE = %s', (_code,))
             row = cursor.fetchone()
             if row is not None:
                 print 'Spider ' + _code + ' name: `' + row[1] + '`'
-                return row[0]
-            raise Exception("Spider not found! Code: " + _code)
+                self.id = row[0]
+                self.username = row[2]
+                self.password = row[3]
+            else:
+                raise Exception("Spider not found! Code: " + _code)
         except mysql.connector.Error:
             raise
         finally:
@@ -39,7 +39,6 @@ class BaseSpider(Spider.Spider):
 
     @classmethod
     def fetchURL(self, trackingTimestamp = time.strftime('%Y-%m-%d %H:%M:%S'), countLimit = 1):
-        self._initId()
         cursor = None
         cnx = None
         try:

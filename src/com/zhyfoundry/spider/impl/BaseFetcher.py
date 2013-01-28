@@ -5,10 +5,15 @@ import socket
 
 class BaseFetcher(Fetcher.Fetcher):
 
-    def __init__(self):
-        pass
+    browser = None
 
-    def fetch(self, url, config):
+    def __init__(self):
+        if not self.browser:
+            self.browser = self.initBrowser(self.__module__)
+
+    @classmethod
+    def initBrowser(self, _code):
+
         br = mechanize.Browser()
 
         # Cookie Jar
@@ -32,8 +37,11 @@ class BaseFetcher(Fetcher.Fetcher):
 
         br.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0')]
 
+        return br
+
+    def fetch(self, url, config):
         try:
-            r = br.open(url, timeout = config.connectTimeout)
+            r = self.browser.open(url, timeout = config.connectTimeout)
         except mechanize.URLError, exc:
             if isinstance(exc.reason, socket.timeout):
                 print "Timeout occurred"

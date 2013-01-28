@@ -6,7 +6,7 @@ class Parser1Test(unittest.TestCase):
     def testParse(self):
         c = Parser1.Parser1()
 
-        parseResult = c.parse("""<tr><td><div><a href="/test.html?action=profile&cid=1" name="1">test1</a></div><div><a href="/test.html?action=profile&cid=2" name="2">test2</a></div></td></tr>""")
+        parseResult = c.parse("""<tr><td><div><a href="/test.html?action=profile&cid=1" name="1">test1</a></div><div><a href="/test.html?action=profile&cid=2" name="2">test2</a></div></td></tr>""", "http://www.zhyfoundry.com/")
         self.assertEqual(None, parseResult.content)
         self.assertTrue(len(parseResult.newSeeds) == 2)
 
@@ -63,7 +63,7 @@ class Parser1Test(unittest.TestCase):
 </TABLE>
 
 
-        """)
+        """, "http://www.zhyfoundry.com/")
         self.assertEqual('Enterprise Name', parseResult2.content.name)
         self.assertEqual('test@zhyfoundry.com', parseResult2.content.email)
         self.assertEqual('123456', parseResult2.content.tel)

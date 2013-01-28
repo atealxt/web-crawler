@@ -20,11 +20,6 @@ class BaseTrackerTest(unittest.TestCase):
 
         pass
 
-    def testExistURL(self):
-        c = BaseTracker.BaseTracker()
-        self.assertEqual(False, c.existURL('asddsa.com'))
-        pass
-
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
