@@ -1,6 +1,6 @@
 from com.zhyfoundry.spider import Configuration
 from com.zhyfoundry.spider.impl import BaseSpider
-from com.zhyfoundry.spider.impl.s2 import Fetcher2, Parser2
+from com.zhyfoundry.spider.impl.s2 import Fetcher2, Parser2, Tracker2
 import time
 
 class Spider2(BaseSpider.BaseSpider):
@@ -30,12 +30,14 @@ class Spider2(BaseSpider.BaseSpider):
                 print 'Login success!'
                 html = fetcher.fetch(urlTracker.url, config)
 
-            if keyword != None:
+            if parser.isSearchResultPage(html):
+                print ''
+            elif keyword != None: # 'TODO check other patterns'
                 print 'Searching ' + keyword
                 html = fetcher.search(keyword)
-                print html
-            elif False:
-                print 'TODO check other patterns'
+                parseSearchResult = parser.parseSearchResult(html)
+                tracker = Tracker2.Tracker2()
+                tracker.track(parseSearchResult.newSeeds, urlTracker.id, self.id, None)
 
             print 'Sleep ' + str(config.interval) + ' second.'
             time.sleep(config.interval)

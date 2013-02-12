@@ -20,7 +20,7 @@ class Parser1(Parser.Parser):
             print traceback.format_exc()
             return ParseResult(None, None)
 
-        archs = soup.findAll(href = re.compile("action=profile&cid="))
+        archs = soup.find_all('a', href = re.compile("action=profile&cid="))
 
         if len(archs) > 0:
             return ParseResult(None, archs)

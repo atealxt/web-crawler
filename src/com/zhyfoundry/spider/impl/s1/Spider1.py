@@ -34,7 +34,7 @@ class Spider1(BaseSpider.BaseSpider):
 
             tracker = Tracker1.Tracker1()
             basePath = urlTracker.url[:urlTracker.url.find("/", 7)]
-            tracker.track(parseResult.newSeeds, urlTracker.id, basePath, self.id)
+            tracker.track(parseResult.newSeeds, urlTracker.id, self.id, basePath)
 
             print 'Sleep ' + str(config.interval) + ' second.'
             time.sleep(config.interval)
