@@ -8,7 +8,7 @@ class Spider2(BaseSpider.BaseSpider):
     def __init__(self):
         super(Spider2, self).__init__()
 
-    def crawl(self, trackingTimestamp):
+    def crawl(self, trackingTimestamp, keyword):
 
         config = Configuration.Configuration.readFromFile();
         countLimit = 65535 if config.maxFetchCount == -1 else config.maxFetchCount
@@ -28,7 +28,14 @@ class Spider2(BaseSpider.BaseSpider):
                 if parser.needLogin(html):
                     raise Exception("Login fail!")
                 print 'Login success!'
+                html = fetcher.fetch(urlTracker.url, config)
+
+            if keyword != None:
+                print 'Searching ' + keyword
+                html = fetcher.search(keyword)
                 print html
+            elif False:
+                print 'TODO check other patterns'
 
             print 'Sleep ' + str(config.interval) + ' second.'
             time.sleep(config.interval)
