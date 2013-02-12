@@ -12,6 +12,7 @@ class Parser(object):
 
 class ParseResult(object):
 
-    def __init__(self, content, newSeeds):
+    def __init__(self, content, newSeeds, newSeedRightNow = None):
         self.content = content
         self.newSeeds = newSeeds
+        self.newSeedRightNow = newSeedRightNow

@@ -1,24 +1,17 @@
-from bs4 import BeautifulSoup
-from com.zhyfoundry.spider import Parser
 from com.zhyfoundry.spider.Parser import ParseResult
+from com.zhyfoundry.spider.impl import BaseParser
 from com.zhyfoundry.spider.impl.CRM import Enterprise
 import re
-import traceback
 
-class Parser1(Parser.Parser):
+class Parser1(BaseParser.BaseParser):
 
     def __init__(self):
-        pass
+        super(Parser1, self).__init__()
 
     def parse(self, source, url):
-        try:
-            soup = BeautifulSoup(source)
-        except:
-            print 'Parse html error:'
-            print source
-            print ''
-            print traceback.format_exc()
-            return ParseResult(None, None)
+        soup = self.getSoup(source)
+        if soup is ParseResult:
+            return soup
 
         archs = soup.find_all('a', href = re.compile("action=profile&cid="))
 

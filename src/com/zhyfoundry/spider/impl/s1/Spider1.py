@@ -14,17 +14,17 @@ class Spider1(BaseSpider.BaseSpider):
 
         config = Configuration.Configuration.readFromFile();
         countLimit = 65535 if config.maxFetchCount == -1 else config.maxFetchCount
-        urlTrackers = self.fetchURL(trackingTimestamp, countLimit)
-        if len(urlTrackers) == 0:
+        urlsToFetch = self.fetchURL(trackingTimestamp, countLimit)
+        if len(urlsToFetch) == 0:
             print 'No URL to fetch.'
             return
-        for urlTracker in urlTrackers:
-            print 'URL to fetch: ' + str(urlTracker)
+        for url in urlsToFetch:
+            print 'URL to fetch: ' + str(url)
             fetcher = Fetcher1.Fetcher1()
-            html = fetcher.fetch(urlTracker.url, config)
+            html = fetcher.fetch(url.url, config)
 
             parser = Parser1.Parser1()
-            parseResult = parser.parse(html, urlTracker.url)
+            parseResult = parser.parse(html, url.url)
 
             if parseResult.content != None:
                 try:
@@ -33,8 +33,9 @@ class Spider1(BaseSpider.BaseSpider):
                     print traceback.format_exc()
 
             tracker = Tracker1.Tracker1()
-            basePath = urlTracker.url[:urlTracker.url.find("/", 7)]
-            tracker.track(parseResult.newSeeds, urlTracker.id, self.id, basePath)
+            basePath = url.url[:url.url.find("/", 7)]
+            tracker.updateTrackTime(url.id)
+            tracker.track(parseResult.newSeeds, url.id, self.id, basePath)
 
             print 'Sleep ' + str(config.interval) + ' second.'
             time.sleep(config.interval)

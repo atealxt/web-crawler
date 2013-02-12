@@ -12,15 +12,20 @@ class Spider2(BaseSpider.BaseSpider):
 
         config = Configuration.Configuration.readFromFile();
         countLimit = 65535 if config.maxFetchCount == -1 else config.maxFetchCount
-        urlTrackers = self.fetchURL(trackingTimestamp, countLimit)
-        if len(urlTrackers) == 0:
+        urlsToFetch = self.fetchURL(trackingTimestamp, countLimit)
+        if len(urlsToFetch) == 0:
             print 'No URL to fetch.'
             return
         fetcher = Fetcher2.Fetcher2()
         parser = Parser2.Parser2()
-        for urlTracker in urlTrackers:
-            print 'URL to fetch: ' + str(urlTracker)
-            html = fetcher.fetch(urlTracker.url, config)
+        count = 0
+        for url in urlsToFetch:
+            if count >= countLimit:
+                print 'Fetch count limitation reached: ' + str(countLimit)
+                break;
+            count += 1;
+            print 'URL to fetch: ' + str(url)
+            html = fetcher.fetch(url.url, config)
 
             if parser.needLogin(html):
                 print 'Need to Login'
@@ -28,16 +33,22 @@ class Spider2(BaseSpider.BaseSpider):
                 if parser.needLogin(html):
                     raise Exception("Login fail!")
                 print 'Login success!'
-                html = fetcher.fetch(urlTracker.url, config)
+                html = fetcher.fetch(url.url, config)
 
-            if parser.isSearchResultPage(html):
-                print ''
-            elif keyword != None: # 'TODO check other patterns'
-                print 'Searching ' + keyword
+            if parser.isDetailPage(html):
+                print 'TODO'
+            elif keyword != None:
+                print 'Search term: ' + keyword
                 html = fetcher.search(keyword)
-                parseSearchResult = parser.parseSearchResult(html)
                 tracker = Tracker2.Tracker2()
-                tracker.track(parseSearchResult.newSeeds, urlTracker.id, self.id, None)
+                tracker.updateTrackTime(url.id)
+                while (True):
+                    parseSearchResult = parser.parseSearchResult(html)
+                    tracker.track(parseSearchResult.newSeeds, url.id, self.id, None)
+                    if parseSearchResult.newSeedRightNow == None or count >= countLimit:
+                        break
+                    html = fetcher.fetch(parseSearchResult.newSeedRightNow['href'], config)
+                    count += 1;
 
             print 'Sleep ' + str(config.interval) + ' second.'
             time.sleep(config.interval)

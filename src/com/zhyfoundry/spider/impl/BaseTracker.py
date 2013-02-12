@@ -117,20 +117,20 @@ class BaseTracker(Tracker.Tracker):
             if cnx:
                 cnx.close()
 
-    def track(self, seeds, source, spiderId, basePath):
-        if seeds != None:
-            for e in seeds:
-                if basePath != None:
-                    canonizeURL = self.canonizeURL(basePath + e['href'])
-                else:
-                    canonizeURL = self.canonizeURL(e['href'])
-                _id = self.getURLId(canonizeURL)
-                if self.isNewSeed(canonizeURL, _id):
-                    print 'Find new url: ' + canonizeURL
-                    self.saveURL(spiderId, canonizeURL, source)
-                else:
-                    self.updateTrackTime(_id)
-        self.updateTrackTime(source)
+    def track(self, seeds, source, spiderId, basePath = None):
+        if seeds == None:
+            return
+        for e in seeds:
+            if basePath != None:
+                canonizeURL = self.canonizeURL(basePath + e['href'])
+            else:
+                canonizeURL = self.canonizeURL(e['href'])
+            _id = self.getURLId(canonizeURL)
+            if self.isNewSeed(canonizeURL, _id):
+                print 'Find new url: ' + canonizeURL
+                self.saveURL(spiderId, canonizeURL, source)
+            else:
+                self.updateTrackTime(_id)
 
     def isNewSeed(self, seed, _id):
         return _id == None
