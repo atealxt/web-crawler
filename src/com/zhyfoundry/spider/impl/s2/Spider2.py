@@ -1,14 +1,16 @@
 from com.zhyfoundry.spider import Configuration
 from com.zhyfoundry.spider.impl import BaseSpider
+from com.zhyfoundry.spider.impl.CRM import CRM
 from com.zhyfoundry.spider.impl.s2 import Fetcher2, Parser2, Tracker2
 import time
+import traceback
 
 class Spider2(BaseSpider.BaseSpider):
 
     def __init__(self):
         super(Spider2, self).__init__()
 
-    def crawl(self, trackingTimestamp, keyword):
+    def crawl(self, trackingTimestamp, keyword = None):
 
         config = Configuration.Configuration.readFromFile();
         countLimit = 65535 if config.maxFetchCount == -1 else config.maxFetchCount
@@ -19,6 +21,7 @@ class Spider2(BaseSpider.BaseSpider):
         fetcher = Fetcher2.Fetcher2()
         parser = Parser2.Parser2()
         count = 0
+        tracker = Tracker2.Tracker2()
         for url in urlsToFetch:
             if count >= countLimit:
                 print 'Fetch count limitation reached: ' + str(countLimit)
@@ -36,11 +39,16 @@ class Spider2(BaseSpider.BaseSpider):
                 html = fetcher.fetch(url.url, config)
 
             if parser.isDetailPage(html):
-                print 'TODO'
+                parseResult = parser.parse(html, url.url)
+                if parseResult.content != None:
+                    try:
+                        CRM.saveEnterprise(parseResult.content);
+                    except:
+                        print traceback.format_exc()
+                tracker.track(parseResult.newSeeds, url.id, self.id, None)
             elif keyword != None:
                 print 'Search term: ' + keyword
                 html = fetcher.search(keyword)
-                tracker = Tracker2.Tracker2()
                 tracker.updateTrackTime(url.id)
                 while (True):
                     parseSearchResult = parser.parseSearchResult(html)
