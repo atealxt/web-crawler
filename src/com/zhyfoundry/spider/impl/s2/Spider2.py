@@ -39,7 +39,7 @@ class Spider2(BaseSpider.BaseSpider):
                 html = fetcher.fetch(url.url, config)
 
             if parser.isDetailPage(html):
-                parseResult = parser.parse(html, url.url)
+                parseResult = parser.parse(html, url.url, config)
                 if parseResult.content != None:
                     try:
                         CRM.saveEnterprise(parseResult.content);

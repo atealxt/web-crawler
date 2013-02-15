@@ -1,6 +1,7 @@
 from com.zhyfoundry.spider.Parser import ParseResult
 from com.zhyfoundry.spider.impl import BaseParser
 from com.zhyfoundry.spider.impl.CRM import Enterprise
+from com.zhyfoundry.spider.impl.s2 import Fetcher2
 import re
 
 class Parser2(BaseParser.BaseParser):
@@ -37,7 +38,7 @@ class Parser2(BaseParser.BaseParser):
             return True
         return False
 
-    def parse(self, source, url):
+    def parse(self, source, url, config):
         soup = self.getSoup(source)
         if soup is ParseResult:
             return soup
@@ -54,7 +55,10 @@ class Parser2(BaseParser.BaseParser):
         siteURL = soup.find('a', class_="p_SiteInternet")
         if siteURL != None:
             _source = siteURL['href']
-            _email = '' #TODO
+            print 'Try to find email'
+            _email = self.getEmail(_source, config) # TODO deep find
+            if _email != '':
+                print 'Found email!'
         else:
             _source = ''
             _email = ''
@@ -63,3 +67,12 @@ class Parser2(BaseParser.BaseParser):
         _countryName = self.getCountryCode(str(soup.find('span', itemprop="addressCountry").string))
         enterprise = Enterprise(_name, _contact, _email, _tel, _mobileNo, _faxNo, _source, _remark, _keyword, _countryName)
         return ParseResult(enterprise, [])
+
+#    regexp_email = r'''(\w+[.|\w])*@(\w+[.])*\w+'''
+    regexp_email = r'''([\w\-\.+]+@\w[\w\-]+\.+[\w\-]+)'''
+    pattern = re.compile(regexp_email)
+    def getEmail(self, url, config):
+        fetcher = Fetcher2.Fetcher2()
+        html = fetcher.fetch(url, config)
+        emailAddresses = set(re.findall(self.pattern, html))
+        return ';'.join(emailAddresses)
