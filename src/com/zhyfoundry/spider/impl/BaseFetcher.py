@@ -1,4 +1,4 @@
-from com.zhyfoundry.spider import Fetcher
+from com.zhyfoundry.spider import Fetcher, Configuration
 import cookielib
 import mechanize
 import socket
@@ -6,6 +6,7 @@ import socket
 class BaseFetcher(Fetcher.Fetcher):
 
     browser = None
+    userAgent = Configuration.Configuration.get('Spider', 'userAgent')
 
     def __init__(self):
         if not self.browser:
@@ -36,7 +37,7 @@ class BaseFetcher(Fetcher.Fetcher):
         #br.set_debug_responses(True)
 
         # TODO configurable
-        br.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0')]
+        br.addheaders = [('User-agent', self.userAgent)]
 
         return br
 

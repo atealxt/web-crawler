@@ -42,7 +42,6 @@ class Spider1(BaseSpider.BaseSpider):
 
 '''
 TODO plus:
-maxFetchCount loop
 maxExecuteTime
 numOfParallel
 '''
