@@ -3,6 +3,7 @@ from com.zhyfoundry.spider.impl import BaseParser
 from com.zhyfoundry.spider.impl.CRM import Enterprise
 from com.zhyfoundry.spider.impl.s2 import Fetcher2
 import re
+import time
 
 class Parser2(BaseParser.BaseParser):
 
@@ -56,9 +57,16 @@ class Parser2(BaseParser.BaseParser):
         if siteURL != None:
             _source = siteURL['href']
             print 'Try to find email'
-            _email = self.getEmail(_source, config) # TODO deep find
+            _email = self.getEmail(_source, config)
             if _email != '':
                 print 'Found email!'
+            else:
+                for tag in soup.find_all('a', href=True):
+                    # TODO inner link condition
+                    _email = self.getEmail(tag['href'], config)
+                    if _email != '':
+                        print 'Found email!'
+                        break
         else:
             _source = ''
             _email = ''
@@ -74,5 +82,7 @@ class Parser2(BaseParser.BaseParser):
     def getEmail(self, url, config):
         fetcher = Fetcher2.Fetcher2()
         html = fetcher.fetch(url, config)
+        print 'Sleep ' + str(config.interval) + ' second.'
+        time.sleep(config.interval)
         emailAddresses = set(re.findall(self.pattern, html))
         return ';'.join(emailAddresses)
