@@ -5,8 +5,6 @@ import traceback
 
 class BaseParser(Parser.Parser):
 
-    DICT_COUNTRY = {'United States': 'US', 'Canada' : 'CA'}; #TODO
-
     def __init__(self):
         super(BaseParser, self).__init__()
 
@@ -22,10 +20,3 @@ class BaseParser(Parser.Parser):
             print ''
             print traceback.format_exc()
             return ParseResult(None, None)
-
-    def getCountryCode(self, country):
-        try:
-            return self.DICT_COUNTRY[country]
-        except KeyError:
-            self.DICT_COUNTRY[country] = country
-            return country

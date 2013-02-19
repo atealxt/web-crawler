@@ -73,7 +73,7 @@ class Parser2(BaseParser.BaseParser):
             _email = ''
         _remark = 'Crawl from: ' + url
         _keyword = ' '.join([a.get_text() for a in soup.find_all('span', itemprop="streetAddress")]) #address
-        _countryName = self.getCountryCode(str(soup.find('span', itemprop="addressCountry").string))
+        _countryName = str(soup.find('span', itemprop="addressCountry").string)
         enterprise = Enterprise(_name, _contact, _email, _tel, _mobileNo, _faxNo, _source, _remark, _keyword, _countryName)
         return ParseResult(enterprise, [])
 

@@ -11,7 +11,10 @@ class CRM(object):
 
         if enterprise.name is None:
             raise Exception("Enterprise's name can't be null!")
-        country_id = self.getCountryId(enterprise.countryName);
+        country_id = self.getCountryId(enterprise.countryName)
+        if country_id == -1:
+            self.createCountry(enterprise.countryName)
+            country_id = self.getCountryId(enterprise.countryName)
         print "Save: " + str(enterprise)
         cursor = None
         cnx = None
@@ -45,7 +48,26 @@ class CRM(object):
             row = cursor.fetchone()
             if row is not None:
                 return row[0]
-            raise Exception("Country not exist: " + countryName)
+            print "Country not exist: " + countryName
+            return -1
+        except mysql.connector.Error:
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+            if cnx:
+                cnx.close()
+
+    @classmethod
+    def createCountry(self, countryName):
+        print "Create new country: " + countryName
+        cursor = None
+        cnx = None
+        try:
+            cnx = DBUtils.DBUtils().getConnectionCRM();
+            cursor = cnx.cursor()
+            cursor.execute('INSERT INTO COUNTRY (`NAME`) VALUES (%s)', (countryName, ))
+            cnx.commit()
         except mysql.connector.Error:
             raise
         finally:
