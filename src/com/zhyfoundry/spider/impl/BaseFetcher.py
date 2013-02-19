@@ -47,7 +47,6 @@ class BaseFetcher(Fetcher.Fetcher):
         except mechanize.URLError, exc:
             if isinstance(exc.reason, socket.timeout):
                 print "Timeout occurred"
-                return None
-            raise
+            return None
         html = r.read()
         return html

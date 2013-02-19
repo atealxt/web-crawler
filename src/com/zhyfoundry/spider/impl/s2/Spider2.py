@@ -55,6 +55,8 @@ class Spider2(BaseSpider.BaseSpider):
                     tracker.track(parseSearchResult.newSeeds, url.id, self.id, None)
                     if parseSearchResult.newSeedRightNow == None or count >= countLimit:
                         break
+                    print 'Sleep ' + str(config.interval) + ' second.'
+                    time.sleep(config.interval)
                     html = fetcher.fetch(parseSearchResult.newSeedRightNow['href'], config)
                     count += 1;
 

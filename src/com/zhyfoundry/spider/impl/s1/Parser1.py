@@ -10,7 +10,7 @@ class Parser1(BaseParser.BaseParser):
 
     def parse(self, source, url):
         soup = self.getSoup(source)
-        if soup is ParseResult:
+        if isinstance(soup, ParseResult):
             return soup
 
         archs = soup.find_all('a', href = re.compile("action=profile&cid="))

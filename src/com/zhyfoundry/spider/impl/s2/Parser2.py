@@ -12,7 +12,7 @@ class Parser2(BaseParser.BaseParser):
 
     def needLogin(self, source):
         soup = self.getSoup(source)
-        if soup is ParseResult:
+        if isinstance(soup, ParseResult):
             return soup
 
         username = soup.find('input', id="username_field")
@@ -22,7 +22,7 @@ class Parser2(BaseParser.BaseParser):
 
     def parseSearchResult(self, source):
         soup = self.getSoup(source)
-        if soup is ParseResult:
+        if isinstance(soup, ParseResult):
             return soup
 
         archs = soup.find_all('a', href=re.compile("com/live/"), class_="color_bleu")
@@ -31,7 +31,7 @@ class Parser2(BaseParser.BaseParser):
 
     def isDetailPage(self, source):
         soup = self.getSoup(source)
-        if soup is ParseResult:
+        if isinstance(soup, ParseResult):
             return soup
 
         result_research = soup.find('div', class_="company_description")
@@ -41,7 +41,7 @@ class Parser2(BaseParser.BaseParser):
 
     def parse(self, source, url, config):
         soup = self.getSoup(source)
-        if soup is ParseResult:
+        if isinstance(soup, ParseResult):
             return soup
 
         _name = str(soup.find('div', itemprop="name").string)
@@ -62,7 +62,8 @@ class Parser2(BaseParser.BaseParser):
                 print 'Found email!'
             else:
                 for tag in soup.find_all('a', href=True):
-                    # TODO inner link condition
+                    if self.isInnerURL(url, tag['href']) == False:
+                        continue
                     _email = self.getEmail(tag['href'], config)
                     if _email != '':
                         print 'Found email!'
@@ -75,6 +76,14 @@ class Parser2(BaseParser.BaseParser):
         _countryName = self.getCountryCode(str(soup.find('span', itemprop="addressCountry").string))
         enterprise = Enterprise(_name, _contact, _email, _tel, _mobileNo, _faxNo, _source, _remark, _keyword, _countryName)
         return ParseResult(enterprise, [])
+
+    def isInnerURL(self, url, href):
+        if href.startswith('/'):
+            return True
+        _idxDot = href.find(".", 11) # before the second dot
+        if url.startswith(href[:_idxDot]):
+            return True
+        return False
 
 #    regexp_email = r'''(\w+[.|\w])*@(\w+[.])*\w+'''
     regexp_email = r'''([\w\-\.+]+@\w[\w\-]+\.+[\w\-]+)'''

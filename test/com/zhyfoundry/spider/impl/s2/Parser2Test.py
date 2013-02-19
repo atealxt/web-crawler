@@ -17,6 +17,15 @@ class Parser2Test(unittest.TestCase):
 
         pass
 
+    def testIsInnerURL(self):
+        c = Parser2.Parser2()
+
+        self.assertTrue(c.isInnerURL("http://www.zhyfoundry.com", "/about"))
+        self.assertTrue(c.isInnerURL("http://www.zhyfoundry.com", "http://www.zhyfoundry.com/about"))
+        self.assertFalse(c.isInnerURL("http://www.zhyfoundry.com", "http://www.baidu.com"))
+
+        pass
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

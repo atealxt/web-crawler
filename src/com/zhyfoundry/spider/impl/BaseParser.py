@@ -11,6 +11,9 @@ class BaseParser(Parser.Parser):
         super(BaseParser, self).__init__()
 
     def getSoup(self, source):
+        if source == None:
+            print 'Source is None!'
+            return ParseResult(None, None)
         try:
             return BeautifulSoup(source)
         except:
