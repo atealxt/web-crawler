@@ -44,7 +44,7 @@ class BaseSpider(Spider.Spider):
         try:
             cnx = DBUtils.DBUtils().getConnection();
             cursor = cnx.cursor()
-            cursor.execute('SELECT ID, URL FROM URL_TRACKER WHERE SPIDER_ID = %s AND LATEST_TRACK_TIME < %s ORDER BY LATEST_TRACK_TIME DESC LIMIT %s',\
+            cursor.execute('SELECT ID, URL FROM URL_TRACKER WHERE SPIDER_ID = %s AND LATEST_TRACK_TIME < %s ORDER BY ID LIMIT %s',\
                            (self.id, trackingTimestamp, countLimit))
             rows = cursor.fetchall()
             urlTrackers = []

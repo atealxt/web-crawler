@@ -46,7 +46,11 @@ class Parser2(BaseParser.BaseParser):
 
         _name = str(soup.find('div', itemprop="name").string)
         _contact = ''
-        _tel = str(soup.find('span', itemprop="telephone").string)
+        tel = soup.find('span', itemprop="telephone")
+        if tel != None:
+            _tel = str(tel.string)
+        else:
+            _tel = ''
         _mobileNo = ''
         faxNo = soup.find('span', itemprop="faxNumber")
         if faxNo != None:
@@ -57,17 +61,25 @@ class Parser2(BaseParser.BaseParser):
         if siteURL != None:
             _source = siteURL['href']
             print 'Try to find email'
-            _email = self.getEmail(_source, config)
+            siteHtml = self.fetchSiteHtml(_source, config)
+            _email = self.getEmail(siteHtml)
             if _email != '':
-                print 'Found email!'
+                print 'Found email: ' + _email
             else:
-                for tag in soup.find_all('a', href=True):
-                    if self.isInnerURL(url, tag['href']) == False:
-                        continue
-                    _email = self.getEmail(tag['href'], config)
-                    if _email != '':
-                        print 'Found email!'
-                        break
+                if siteHtml != None:
+                    soupSite = self.getSoup(siteHtml)
+                    if isinstance(soupSite, ParseResult):
+                        pass # do nothing
+                    else:
+                        for tag in soupSite.find_all('a', href=True):
+                            if self.isInnerURL(url, tag['href']) == False:
+                                continue
+                            fullUrl = self.getFullUrl(_source, tag['href']);
+                            pageHtml = self.fetchSiteHtml(fullUrl, config)
+                            _email = self.getEmail(pageHtml)
+                            if _email != '':
+                                print 'Found email: ' + _email
+                                break
         else:
             _source = ''
             _email = ''
@@ -85,13 +97,31 @@ class Parser2(BaseParser.BaseParser):
             return True
         return False
 
-#    regexp_email = r'''(\w+[.|\w])*@(\w+[.])*\w+'''
-    regexp_email = r'''([\w\-\.+]+@\w[\w\-]+\.+[\w\-]+)'''
-    pattern = re.compile(regexp_email)
-    def getEmail(self, url, config):
+    def getFullUrl(self, source, href):
+        if href.startswith('http'):
+            return href
+        _href = href
+        if _href.startswith('/') == False:
+            _href = "/" + _href;
+        _idxSlash = source.find("/", 8)
+        if _idxSlash == -1:
+            return source + _href;
+        else:
+            return source[:_idxSlash] + _href;
+
+    def fetchSiteHtml(self, url, config):
+        print 'Find email from page: ' + url
         fetcher = Fetcher2.Fetcher2()
         html = fetcher.fetch(url, config)
         print 'Sleep ' + str(config.interval) + ' second.'
         time.sleep(config.interval)
+        return html
+
+#    regexp_email = r'''(\w+[.|\w])*@(\w+[.])*\w+'''
+    regexp_email = r'''([\w\-\.+]+@\w[\w\-]+\.+[\w\-]+)'''
+    pattern = re.compile(regexp_email)
+    def getEmail(self, html):
+        if html == None:
+            return ''
         emailAddresses = set(re.findall(self.pattern, html))
         return ';'.join(emailAddresses)
