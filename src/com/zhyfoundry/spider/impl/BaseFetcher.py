@@ -1,7 +1,8 @@
 from com.zhyfoundry.spider import Fetcher, Configuration
 import cookielib
 import mechanize
-import socket
+#import socket
+import traceback
 
 class BaseFetcher(Fetcher.Fetcher):
 
@@ -44,9 +45,10 @@ class BaseFetcher(Fetcher.Fetcher):
     def fetch(self, url, config):
         try:
             r = self.browser.open(url, timeout = config.connectTimeout)
-        except mechanize.URLError, exc:
-            if isinstance(exc.reason, socket.timeout):
-                print "Timeout occurred"
+        except mechanize.URLError:
+#            if isinstance(exc.reason, socket.timeout):
+#                print "Timeout occurred"
+            print traceback.format_exc()
             return None
         html = r.read()
         return html

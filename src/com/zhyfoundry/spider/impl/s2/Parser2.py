@@ -13,7 +13,7 @@ class Parser2(BaseParser.BaseParser):
     def needLogin(self, source):
         soup = self.getSoup(source)
         if isinstance(soup, ParseResult):
-            return soup
+            return False
 
         username = soup.find('input', id="username_field")
         if username != None:
@@ -32,7 +32,7 @@ class Parser2(BaseParser.BaseParser):
     def isDetailPage(self, source):
         soup = self.getSoup(source)
         if isinstance(soup, ParseResult):
-            return soup
+            return False
 
         result_research = soup.find('div', class_="company_description")
         if result_research != None:

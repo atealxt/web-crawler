@@ -1,6 +1,6 @@
 from com.zhyfoundry.spider.impl import BaseFetcher
 import mechanize
-import socket
+import traceback
 
 class Fetcher2(BaseFetcher.BaseFetcher):
 
@@ -16,11 +16,9 @@ class Fetcher2(BaseFetcher.BaseFetcher):
             _browser = self.browser.submit()
             html = _browser.read()
             return html
-        except mechanize.URLError, exc:
-            if isinstance(exc.reason, socket.timeout):
-                print "Timeout occurred"
-                return None
-            raise
+        except mechanize.URLError:
+            print traceback.format_exc()
+            return None
 
     def search(self, keyword):
         try:
@@ -31,9 +29,7 @@ class Fetcher2(BaseFetcher.BaseFetcher):
             _browser = self.browser.submit()
             html = _browser.read()
             return html
-        except mechanize.URLError, exc:
-            if isinstance(exc.reason, socket.timeout):
-                print "Timeout occurred"
-                return None
-            raise
+        except mechanize.URLError:
+            print traceback.format_exc()
+            return None
 
