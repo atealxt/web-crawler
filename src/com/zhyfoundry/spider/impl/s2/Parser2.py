@@ -45,7 +45,7 @@ class Parser2(BaseParser.BaseParser):
             return soup
 
         _name = str(soup.find('div', itemprop="name").string)
-        _contact = ''
+        _contact = '' # TODO find contact under `Executives`
         tel = soup.find('span', itemprop="telephone")
         if tel != None:
             _tel = str(tel.string)
@@ -58,6 +58,8 @@ class Parser2(BaseParser.BaseParser):
         else:
             _faxNo = ''
         siteURL = soup.find('a', class_="p_SiteInternet")
+        if siteURL == None:
+            siteURL = soup.find('a', class_="smarterwiki-linkify")
         if siteURL != None:
             _source = siteURL['href']
             print 'Try to find email'
