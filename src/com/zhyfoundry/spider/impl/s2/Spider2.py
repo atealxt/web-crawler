@@ -55,12 +55,20 @@ class Spider2(BaseSpider.BaseSpider):
                     parseSearchResult = parser.parseSearchResult(html)
                     tracker.track(parseSearchResult.newSeeds, url.id, self.id, None)
                     if parseSearchResult.newSeedRightNow == None or count >= countLimit:
+                        print 'parseSearchResult.newSeedRightNow == None: ' + str(parseSearchResult.newSeedRightNow == None)
+                        print 'count >= countLimit: ' + str(count >= countLimit)
                         break
                     page += 1
                     print 'Will crawl page ' +  str(page) + ': ' + parseSearchResult.newSeedRightNow['href']
                     print 'Sleep ' + str(config.interval) + ' second.'
                     time.sleep(config.interval)
                     html = fetcher.fetch(parseSearchResult.newSeedRightNow['href'], config)
+                    if html == None:
+                        retryTimes = 0
+                        while (retryTimes < config.maxRetryTimes and html == None):
+                            retryTimes += 1
+                            print 'Retry ' + str(retryTimes)
+                            html = fetcher.fetch(parseSearchResult.newSeedRightNow['href'], config)
                     count += 1
 
             print 'Sleep ' + str(config.interval) + ' second.'

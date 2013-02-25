@@ -7,22 +7,24 @@ class Configuration(object):
     _configParser.read(os.path.join(os.path.dirname(__file__), '..', '..' , '..', 'spider.cfg'))
     _instanceFromCfgFile = None
 
-    def __init__(self, connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval):
+    def __init__(self, connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval, maxRetryTimes):
         self.connectTimeout = connectTimeout
         self.maxFetchCount = maxFetchCount
         self.maxExecuteTime = maxExecuteTime
         self.numOfParallel = numOfParallel
         self.interval = interval
+        self.maxRetryTimes = maxRetryTimes
 
     @classmethod
     def readFromFile(self):
         if not self._instanceFromCfgFile:
-            connectTimeout = self.getint('Spider', 'connectTimeout');
-            maxFetchCount = self.getint('Spider', 'maxFetchCount');
-            maxExecuteTime = self.getint('Spider', 'maxExecuteTime');
-            numOfParallel = self.getint('Spider', 'numOfParallel');
-            interval = self.getint('Spider', 'interval');
-            self._instanceFromCfgFile = self(connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval)
+            connectTimeout = self.getint('Spider', 'connectTimeout')
+            maxFetchCount = self.getint('Spider', 'maxFetchCount')
+            maxExecuteTime = self.getint('Spider', 'maxExecuteTime')
+            numOfParallel = self.getint('Spider', 'numOfParallel')
+            interval = self.getint('Spider', 'interval')
+            maxRetryTimes = self.getint('Spider', 'maxRetryTimes');
+            self._instanceFromCfgFile = self(connectTimeout, maxFetchCount, maxExecuteTime, numOfParallel, interval, maxRetryTimes)
         return self._instanceFromCfgFile;
 
     def __repr__(self):
@@ -31,6 +33,7 @@ class Configuration(object):
              + ', maxExecuteTime = ' + str(self.maxExecuteTime)\
              + ', numOfParallel = ' + str(self.numOfParallel)\
              + ', interval = ' + str(self.interval)\
+             + ', maxRetryTimes = ' + str(self.maxRetryTimes)\
 
     @classmethod
     def get(self, section, key):
