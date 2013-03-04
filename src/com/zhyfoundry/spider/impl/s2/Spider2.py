@@ -45,7 +45,8 @@ class Spider2(BaseSpider.BaseSpider):
                         CRM.saveEnterprise(parseResult.content);
                     except:
                         print traceback.format_exc()
-                tracker.track(parseResult.newSeeds, url.id, self.id, None)
+                    tracker.updateTrackTime(url.id)
+                    tracker.track(parseResult.newSeeds, url.id, self.id, None)
             elif keyword != None:
                 print 'Search term: ' + keyword
                 html = fetcher.search(keyword)

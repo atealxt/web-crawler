@@ -57,11 +57,17 @@ class Parser2(BaseParser.BaseParser):
             _faxNo = str(faxNo.string)
         else:
             _faxNo = ''
+        _source = None
         siteURL = soup.find('a', class_="p_SiteInternet")
-        if siteURL == None:
-            siteURL = soup.find('a', class_="smarterwiki-linkify")
         if siteURL != None:
             _source = siteURL['href']
+        else:
+            site = soup.find('strong', text=re.compile("Web Site"))
+            if site != None:
+                siteURL = site.parent.find_next("td")
+                if siteURL != None:
+                    _source = siteURL.string.strip()
+        if _source != None:
             print 'Try to find email'
             siteHtml = self.fetchSiteHtml(_source, config)
             _email = self.getEmail(siteHtml)

@@ -4,7 +4,7 @@ import unittest
 
 class Parser2Test(unittest.TestCase):
 
-    def testParse(self):
+    def testGetEmail(self):
         c = Parser2.Parser2()
 
         config = Configuration.Configuration.readFromFile();
