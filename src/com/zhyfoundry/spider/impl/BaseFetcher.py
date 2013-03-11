@@ -50,5 +50,8 @@ class BaseFetcher(Fetcher.Fetcher):
 #                print "Timeout occurred"
             print traceback.format_exc()
             return None
-        html = r.read()
-        return html
+        try:
+            return r.read()
+        except:
+            print traceback.format_exc()
+            return None
